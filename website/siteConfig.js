@@ -27,7 +27,9 @@ function loadMD(fsPath) {
 }
 
 function loadBuildToolMD(fsPath) {
-  const content = fs.readFileSync(path.join(__dirname, fsPath), "utf8").split("\n");
+  // The doc file has the same name as its parent directory, and its extension is `.md`
+  const fullName = path.join(__dirname, fsPath, path.basename(fsPath) + ".md")
+  const content = fs.readFileSync(fullName, "utf8").split("\n");
   var idx1 = content.indexOf("<!-- start -->");
   var idx2 = content.indexOf("<!-- end -->");
   if (idx1 == -1 || idx2 == -1 || idx1 >= idx2) {
@@ -48,7 +50,7 @@ toolsMD.forEach(tool => {
 
 const buildToolsMD = findMarkDownSync("../out/build-tools/");
 buildToolsMD.forEach(buildTool => {
-  buildTool.guide = loadBuildToolMD(`${buildTool.path}.md`);
+  buildTool.guide = loadBuildToolMD(buildTool.path);
 });
 
 const releaseTableMD = loadMD("../out/release-table.md")
